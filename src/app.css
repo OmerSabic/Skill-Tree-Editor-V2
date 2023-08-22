@@ -1,0 +1,214 @@
+/*Now the CSS*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: rgb(250, 250, 250);
+  color: rgb(17, 17, 17);
+  border: 0;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 32px;
+  border-radius: 6px;
+  border: transparent 1px solid;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+button.btn-blue {
+  background-color: #111;
+  border-color: #1e9de7;
+  color: #1e9de7;
+}
+
+button.btn-red {
+  background-color: #111;
+  border-color: #d92038;
+  color: #d92038;
+}
+
+button.btn-white {
+  color: #fafafa;
+  border: 1px solid #fafafa;
+  background-color: #111;
+}
+
+input {
+  background: #1a1a1a;
+  border: 1px solid #414141;
+  color: var(--white);
+  border-radius: 6px;
+}
+
+:root {
+  --white: #fbfbfb;
+  --black: #111;
+  --gray: #3c3d42;
+  --light-gray: #7c7f85;
+
+  --connector-color: #3c3d42;
+}
+
+body {
+  background: #242424;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.116) 1px,
+    transparent 0
+  );
+  background-size: 40px 40px;
+  overflow: hidden;
+  font-family: Inter var, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+.tree {
+  position: absolute;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.tree ul {
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+  position: relative;
+
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+}
+
+.tree li {
+  float: left;
+  text-align: center;
+  list-style-type: none;
+  position: relative;
+  padding: 20px 5px 0 5px;
+
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+}
+
+/*We will use ::before and ::after to draw the connectors*/
+
+.tree li::before,
+.tree li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 50%;
+  border-top: 1px solid var(--connector-color);
+  width: 50%;
+  height: 20px;
+}
+.tree li::after {
+  right: auto;
+  left: 50%;
+  border-left: 1px solid var(--connector-color);
+}
+
+/*We need to remove left-right connectors from elements without 
+any siblings*/
+.tree li:only-child::after,
+.tree li:only-child::before {
+  display: none;
+}
+
+/*Remove space from the top of single children*/
+.tree li:only-child {
+  padding-top: 0;
+}
+
+/*Remove left connector from first child and 
+right connector from last child*/
+.tree li:first-child::before,
+.tree li:last-child::after {
+  border: 0 none;
+}
+/*Adding back the vertical connector to the last nodes*/
+.tree li:last-child::before {
+  border-right: 1px solid var(--connector-color);
+  border-radius: 0 5px 0 0;
+  -webkit-border-radius: 0 5px 0 0;
+  -moz-border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after {
+  border-radius: 5px 0 0 0;
+  -webkit-border-radius: 5px 0 0 0;
+  -moz-border-radius: 5px 0 0 0;
+}
+
+/*Time to add downward connectors from parents*/
+.tree ul ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 1px solid var(--connector-color);
+  width: 0;
+  height: 20px;
+}
+
+.tree > ul > li::before,
+.tree > ul > li::after {
+  border-top: none;
+  border-left: none;
+  border: top;
+}
+
+.tree li a {
+  background: #0e0e0e;
+  border: var(--gray) 2px solid;
+  color: rgba(255, 255, 255, 0.87);
+
+  padding: 5px 10px;
+  text-decoration: none;
+  font-family: arial, verdana, tahoma;
+  font-size: 16px;
+  display: inline-block;
+  width: max-content;
+
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+
+  transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+/*Time for some hover effects*/
+/*We will apply the hover effect the the lineage of the element also*/
+.tree li a:hover,
+.tree li a:hover + ul li a {
+  background: #202020;
+  border: 2px solid #94a0b4;
+}
+/*Connector styles on hover*/
+.tree li a:hover + ul li::after,
+.tree li a:hover + ul li::before,
+.tree li a:hover + ul::before,
+.tree li a:hover + ul ul::before {
+  border-color: #94a0b4;
+}
