@@ -1,20 +1,52 @@
 <script>
   import EditableFields from "../EditableFields.svelte";
-  import { editingNode } from "../store";
+  import { apiKey, apiURL, contextNode, loading } from "../store.js";
+  import { editorModal } from "./modalStores.js";
   import Modal from "./Modal.svelte";
-  let showModal = false;
+  import { applyTemplate } from "../helpers/tree.helper";
+  import {
+    skillTemplate,
+    itemTemplate,
+    challengeTemplate,
+  } from "../templates.js";
+  import { updateNode } from "../helpers/api.helper";
+  import { toasts } from "svelte-toasts";
 
-  editingNode.subscribe((data) => {
-    showModal = !Object.keys(data).includes("empty");
-  });
+  const typeToTemplate = {
+    skill: $skillTemplate,
+    item: $itemTemplate,
+    challenge: $challengeTemplate,
+  };
+
+  async function updateController() {
+    loading.set(true);
+    let response = await updateNode($contextNode, $apiURL, $apiKey);
+    if (response.ok) {
+      loading.set(false);
+      contextNode.set({});
+      toasts.success("Success!", "Successfuly updated node.");
+    } else {
+      toasts.error(
+        "Error!",
+        "There was a problem with updating your node. Check the console."
+      );
+    }
+  }
+
+  let nodeData = {};
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
-<Modal bind:showModal>
+<Modal showModal={true}>
   <div on:click|stopPropagation on:scroll|stopPropagation>
-    <EditableFields data={$editingNode} />
+    <EditableFields
+      data={applyTemplate(typeToTemplate[$contextNode.type], $contextNode)}
+    />
     <hr />
-    <slot name="controls" />
+    <div style="margin-top: 1rem; text-align: right">
+      <button on:click={() => editorModal.set(false)}>Close</button>
+      <button class="btn-blue" on:click={updateController}>Update</button>
+    </div>
   </div>
 </Modal>

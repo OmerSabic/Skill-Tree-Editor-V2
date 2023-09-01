@@ -8458,3 +8458,55 @@ export async function getFullTree(apiUrl, apiKey) {
   return allItems;
   // console.log(allItems.length)
 }
+
+export function applyTemplate(templateJSON, json) {
+  const result = {};
+
+  // Iterate through the keys in the templateJSON
+  for (const key in templateJSON) {
+    if (templateJSON.hasOwnProperty(key)) {
+      const valueType = templateJSON[key];
+
+      // If the key exists in the json object, apply the type conversion
+      if (json.hasOwnProperty(key)) {
+        switch (valueType) {
+          case "string":
+            result[key] = String(json[key]);
+            break;
+          case "number":
+            result[key] = Number(json[key]);
+            break;
+          case "array":
+            result[key] = Array.isArray(json[key]) ? json[key] : new Array(json[key]).filter(x=>x)
+            break;
+          // Handle other value types as needed
+          default:
+            result[key] = json[key];
+        }
+      } else {
+        // If the key is missing in json, set it to the default value based on the type
+        switch (valueType) {
+          case "string":
+            result[key] = "";
+            break;
+          case "number":
+            result[key] = 0;
+            break;
+          case "array":
+            result[key] = [];
+          default:
+            result[key] = null;
+        }
+      }
+    }
+  }
+
+  // Include properties from json that are not in the template
+  for (const key in json) {
+    if (json.hasOwnProperty(key) && !templateJSON.hasOwnProperty(key)) {
+      result[key] = json[key];
+    }
+  }
+
+  return result;
+}

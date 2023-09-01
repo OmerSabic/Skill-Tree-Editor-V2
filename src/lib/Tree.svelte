@@ -1,7 +1,7 @@
 <script>
   import panzoom from "panzoom";
   import { onMount } from "svelte";
-  import { treeData, editingNode, pausePan } from "./store.js";
+  import { treeData, pausePan } from "./store.js";
   import TreeNode from "./TreeNode.svelte";
 
   let treeContainer;
@@ -25,7 +25,7 @@
 </script>
 
 <div class="tree" bind:this={treeContainer}>
-  <ul>
+  <ul class="children">
     {#each $treeData.filter((item) => item.requires.length === 0) as node}
       <TreeNode {node} />
     {/each}

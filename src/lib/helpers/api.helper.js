@@ -24,21 +24,6 @@ export const updateNode = async (data, apiUrl, apiKey) => {
   );
 };
 
-export const deleteNode = async (data, apiUrl, apiKey) => {
-  return await fetch(
-    `${apiUrl}/v1/${data.type}s/delete${capitalizeFirstLetter(data.type)}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: apiKey,
-      },
-      body: JSON.stringify({
-        id: data._id
-      }),
-    }
-  );
-};
-
 export const createNode = async (data, apiUrl, apiKey) => {
   const newData = structuredClone(data);
 
@@ -47,7 +32,7 @@ export const createNode = async (data, apiUrl, apiKey) => {
   return await fetch(
     `${apiUrl}/v1/${data.type}s/create${capitalizeFirstLetter(data.type)}`,
     {
-      method: "PUSH",
+      method: "POST",
       headers: {
         Authorization: apiKey,
       },

@@ -5,6 +5,15 @@
   box-sizing: border-box;
 }
 
+:root {
+  --white: #fbfbfb;
+  --black: #111;
+  --gray: #3c3d42;
+  --light-gray: #7c7f85;
+
+  --connector-color: #3c3d42;
+}
+
 button {
   background-color: rgb(250, 250, 250);
   color: rgb(17, 17, 17);
@@ -52,15 +61,6 @@ input {
   border-radius: 6px;
 }
 
-:root {
-  --white: #fbfbfb;
-  --black: #111;
-  --gray: #3c3d42;
-  --light-gray: #7c7f85;
-
-  --connector-color: #3c3d42;
-}
-
 body {
   background: #242424;
   background-image: radial-gradient(
@@ -80,7 +80,7 @@ body {
   overflow: hidden;
 }
 
-.tree ul {
+.tree ul.children {
   display: flex;
   flex-direction: row;
   padding-top: 20px;
@@ -91,7 +91,7 @@ body {
   -moz-transition: all 0.5s;
 }
 
-.tree li {
+.tree li.node {
   float: left;
   text-align: center;
   list-style-type: none;
